@@ -4,30 +4,30 @@ use serde_json;
 
 
 // FIRST REQUEST ALWAYS
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RegisterAllRequest {
     pub allrequest: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FirstMethodRequest{
     pub method: String,
     pub nextrequest: String
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SecondIdentRequest{
     pub identifiant: String,
     pub nextrequest: String
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ThirdSaltHashRequest{
     pub salthash: String,
     pub nextrequest: String
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FourthSaltSecureRequest{
     pub saltsecure: String,
     pub password: String
