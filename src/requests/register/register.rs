@@ -89,3 +89,36 @@ pub fn format_register_chain(
         allrequest: zero_b64,
     }
 }
+
+
+pub struct RegisterChainDecoded {
+    pub method: String,
+    pub identifiant: String,
+    pub salthash: String,
+    pub saltsecure: String,
+    pub password: String,
+}
+
+pub fn deformater(register: RegisterAllRequest) -> RegisterChainDecoded {
+    // Étape 0 : décoder la première enveloppe
+    let zero: FirstMethodRequest = decode_from_base64(&register.allrequest);
+
+    // Étape 1 : décoder la seconde enveloppe
+    let first: SecondIdentRequest = decode_from_base64(&zero.nextrequest);
+
+    // Étape 2 : décoder la troisième enveloppe
+    let second: ThirdSaltHashRequest = decode_from_base64(&first.nextrequest);
+
+    // Étape 3 : décoder la quatrième enveloppe
+    let third: FourthSaltSecureRequest = decode_from_base64(&second.nextrequest);
+
+    // Construire la structure complète
+    RegisterChainDecoded {
+        method: zero.method,
+        identifiant: first.identifiant,
+        salthash: second.salthash,
+        saltsecure: third.saltsecure,
+        password: third.password,
+    }
+}
+
