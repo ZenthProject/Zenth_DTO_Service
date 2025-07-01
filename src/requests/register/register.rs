@@ -122,3 +122,109 @@ pub fn deformater(register: RegisterAllRequest) -> RegisterChainDecoded {
     }
 }
 
+
+
+pub fn encode_fourth_layer(
+    saltsecure: String,
+    password: String,
+    encode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<String, String> {
+    let data = FourthSaltSecureRequest { saltsecure, password };
+    let json = serde_json::to_vec(&data).map_err(|e| format!("Erreur JSON : {}", e))?;
+    let encodeed = encode_fn(&json)?;
+    Ok(base64::engine::general_purpose::STANDARD.encode(&encodeed))
+}
+
+
+pub fn encode_third_layer(
+    salthash: String,
+    next_encodeed: String,
+    encode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<String, String> {
+    let data = ThirdSaltHashRequest {
+        salthash,
+        nextrequest: next_encodeed,
+    };
+    let json = serde_json::to_vec(&data).map_err(|e| format!("Erreur JSON : {}", e))?;
+    let encodeed = encode_fn(&json)?;
+    Ok(base64::engine::general_purpose::STANDARD.encode(&encodeed))
+}
+
+
+pub fn encode_second_layer(
+    identifiant: String,
+    next_encodeed: String,
+    encode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<String, String> {
+    let data = SecondIdentRequest {
+        identifiant,
+        nextrequest: next_encodeed,
+    };
+    let json = serde_json::to_vec(&data).map_err(|e| format!("Erreur JSON : {}", e))?;
+    let encodeed = encode_fn(&json)?;
+    Ok(base64::engine::general_purpose::STANDARD.encode(&encodeed))
+}
+
+pub fn encode_first_layer(
+    method: String,
+    next_encodeed: String,
+    encode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<RegisterAllRequest, String> {
+    let data = FirstMethodRequest {
+        method,
+        nextrequest: next_encodeed,
+    };
+    let json = serde_json::to_vec(&data).map_err(|e| format!("Erreur JSON : {}", e))?;
+    let encodeed = encode_fn(&json)?;
+    let encoded = base64::engine::general_purpose::STANDARD.encode(&encodeed);
+    Ok(RegisterAllRequest { allrequest: encoded })
+}
+
+
+
+pub fn decode_first_layer(
+    encoded: &str,
+    decode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<FirstMethodRequest, String> {
+    let encodeed_bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|e| format!("Base64 error: {}", e))?;
+    let decodeed = decode_fn(&encodeed_bytes)?;
+    serde_json::from_slice(&decodeed).map_err(|e| format!("JSON error: {}", e))
+}
+
+
+pub fn decode_second_layer(
+    encoded: &str,
+    decode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<SecondIdentRequest, String> {
+    let encodeed_bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|e| format!("Base64 error: {}", e))?;
+    let decodeed = decode_fn(&encodeed_bytes)?;
+    serde_json::from_slice(&decodeed).map_err(|e| format!("JSON error: {}", e))
+}
+
+
+pub fn decode_third_layer(
+    encoded: &str,
+    decode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<ThirdSaltHashRequest, String> {
+    let encodeed_bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|e| format!("Base64 error: {}", e))?;
+    let decodeed = decode_fn(&encodeed_bytes)?;
+    serde_json::from_slice(&decodeed).map_err(|e| format!("JSON error: {}", e))
+}
+
+
+pub fn decode_fourth_layer(
+    encoded: &str,
+    decode_fn: impl Fn(&[u8]) -> Result<Vec<u8>, String>,
+) -> Result<FourthSaltSecureRequest, String> {
+    let encodeed_bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|e| format!("Base64 error: {}", e))?;
+    let decodeed = decode_fn(&encodeed_bytes)?;
+    serde_json::from_slice(&decodeed).map_err(|e| format!("JSON error: {}", e))
+}

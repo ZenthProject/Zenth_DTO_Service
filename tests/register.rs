@@ -1,4 +1,8 @@
-use zenth_dto_serice::requests::register::register::{
+// Update the import path below to match your actual module structure.
+// For example, if your modules are in src/requests/register.rs and the items are public, use:
+// Update the path below to match your actual module structure.
+// If 'register.rs' is in 'src/requests/', use 'crate::requests::register' or 'zenth_dtos_service::requests::register' if your crate is named 'zenth_dtos_service'.
+use zenth_dto_service::requests::register::register::{
     FirstMethodRequest,
     SecondIdentRequest,
     ThirdSaltHashRequest,
