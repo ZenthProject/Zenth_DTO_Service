@@ -90,7 +90,7 @@ pub fn format_register_chain(
     }
 }
 
-
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RegisterChainDecoded {
     pub method: String,
     pub identifiant: String,
