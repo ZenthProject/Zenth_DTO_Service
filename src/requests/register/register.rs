@@ -124,6 +124,12 @@ pub fn deformater(register: RegisterAllRequest) -> RegisterChainDecoded {
 
 
 
+pub fn deformater_first(register: RegisterAllRequest) -> (String, String) {
+    let zero: FirstMethodRequest = decode_from_base64(&register.allrequest);
+    (zero.method, zero.nextrequest)
+}
+
+
 pub fn encode_fourth_layer(
     saltsecure: String,
     password: String,
