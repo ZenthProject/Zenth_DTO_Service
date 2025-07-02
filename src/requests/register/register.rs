@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use base64::{engine::general_purpose, Engine as _};
 use serde_json;
-
+use zenth_crypto_service::hashs::base64_vecdecode;
 
 // FIRST REQUEST ALWAYS
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -233,4 +233,16 @@ pub fn decode_fourth_layer(
         .map_err(|e| format!("Base64 error: {}", e))?;
     let decodeed = decode_fn(&encodeed_bytes)?;
     serde_json::from_slice(&decodeed).map_err(|e| format!("JSON error: {}", e))
+}
+
+
+pub fn extraire_method_et_next(payload: String) -> Result<(String, String), String> {
+    let register: RegisterAllRequest = serde_json::from_str(&payload)
+        .map_err(|e| format!("Erreur JSON initial : {}", e))?;
+    let decoded_bytes = base64_vecdecode(&register.allrequest)
+        .map_err(|e| format!("Erreur de décodage base64 : {}", e))?;
+    let first: FirstMethodRequest = serde_json::from_slice(&decoded_bytes)
+        .map_err(|e| format!("Erreur JSON niveau 1 : {}", e))?;
+
+    Ok((first.method, first.nextrequest))
 }
