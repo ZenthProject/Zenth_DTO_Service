@@ -140,3 +140,12 @@ pub fn extraire_salt_et_next(encoded: &str) -> Result<(String, String), String> 
         .map_err(|e| format!("Erreur JSON dans DataRequest : {}", e))?;
     Ok((data_request.salthash, data_request.nextrequest))
 }
+
+
+pub fn extraire_salt_et_password(encoded: &str) -> Result<(String, String), String> {
+    let decoded_bytes = base64_vecdecode(encoded)
+        .map_err(|e| format!("Erreur de décodage base64 : {}", e))?;
+    let data_request: FourthSaltSecureRequest = serde_json::from_slice(&decoded_bytes)
+        .map_err(|e| format!("Erreur JSON dans SaltPasswordRequest : {}", e))?;
+    Ok((data_request.saltsecure, data_request.password))
+}
