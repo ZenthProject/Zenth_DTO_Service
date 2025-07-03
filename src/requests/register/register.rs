@@ -133,7 +133,7 @@ pub fn extraire_identifiant_et_next(encoded: &str) -> Result<(String, String), S
 }
 
 
-pub fn extraire_donnees_et_next(encoded: &str) -> Result<(String, String), String> {
+pub fn extraire_salt_et_next(encoded: &str) -> Result<(String, String), String> {
     let decoded_bytes = base64_vecdecode(encoded)
         .map_err(|e| format!("Erreur de décodage base64 : {}", e))?;
     let data_request: ThirdSaltHashRequest = serde_json::from_slice(&decoded_bytes)
