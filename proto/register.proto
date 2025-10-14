@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package auth;
+
+// Twofish-CBC + HMAC-SHA3-512
+message Request {
+  RegisterRequest requete_global = 1; // Contenu chiffré complet de la requête
+}
+
+// Requête d'enregistrement entièrement chiffrée
+message RegisterRequest {
+  bytes client_nonce = 1; // Nonce aléatoire (16-32 octets) pour prévenir les replay attacks.
+  int64 timestamp = 2;    // Timestamp epoch ms (optionnel, peut être chiffré dans l'envelope)
+  EncryptedEnvelope envelope = 10; // Enveloppe contenant toutes les couches chiffrées
+}
+
+// Envelope extérieure (Serpent-CBC + HMAC)
+message EncryptedEnvelope {
+  bytes client_ephemeral_pub = 1; // Clé publique éphémère du client (X25519, 32 octets)
+  repeated KeyWrap key_wraps = 2; // KEK encapsulées pour serveur(s)
+  Layer2Ciphertext layer2 = 3;    // Ciphertext de la couche intermédiaire + tag AEAD
+  bytes hmac = 4;                 // HMAC-SHA3-512 global de l'enveloppe
+  bytes client_signature = 5;      // Signature optionnelle Ed25519
+}
+
+// Couche intermédiaire (AES-256-GCM)
+message Layer2Ciphertext {
+  
+  bytes ciphertext = 1;            // Ciphertext AES-GCM
+  bytes nonce = 2;                 // Nonce AES-GCM
+  Layer1Ciphertext layer1 = 3;     // Ciphertext de la couche intérieure
+  bytes aead_tag = 4;              // Tag AEAD de cette couche
+}
+
+// Couche intérieure (ChaCha20-Poly1305)
+message Layer1Ciphertext {
+  bytes ciphertext = 1;            // Ciphertext ChaCha20-Poly1305 du InnerRegisterPayload
+  bytes nonce = 2;                 // Nonce ChaCha20-Poly1305
+  InnerRegisterPayload inner = 3;  // Payload interne clair (avant chiffrement)
+  bytes aead_tag = 4;              // Tag AEAD de cette couche
+}
+
+// Encapsulation asymétrique d'une ou plusieurs clés symétriques
+message KeyWrap {
+  string alg = 1;         // Algorithme de wrapping, ex: "X25519-HKDF-SHA3-512"
+  bytes wrapped_key = 2;  // Clé symétrique chiffrée (AES-GCM ou RSA-OAEP)
+  bytes key_id = 3;       // Identifiant de la clé du destinataire
+}
+
+// Payload interne en clair AVANT chiffrement
+message InnerRegisterPayload {
+  string username = 1;            // Nom d'utilisateur (login)
+  bytes password_proof = 2;       // Preuve mot de passe (Argon2id ou OPAQUE)
+  int64 timestamp = 3;            // Timestamp côté client
+}

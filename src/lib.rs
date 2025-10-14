@@ -1,1 +1,5 @@
-pub mod requests;
+mod auth {
+    tonic::include_proto!(
+        "auth"
+    );
+}
