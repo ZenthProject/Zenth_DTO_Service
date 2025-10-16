@@ -8,7 +8,7 @@ message Request {
 
 message InnerRegisterPayload {
     string method = 1;
-    string username = 1;
-    bytes password_proof = 2;
-    int64 timestamp = 3;
+    string username = 2;
+    bytes password_proof = 3;
+    int64 timestamp = 4;
 }
