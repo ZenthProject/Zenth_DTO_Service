@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package auth;
+package registertest;
 
 message Request {
     InnerRegisterPayload requete_global = 1;

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package auth;
+package register;
 
 // Twofish-CBC + HMAC-SHA3-512
 message Request {

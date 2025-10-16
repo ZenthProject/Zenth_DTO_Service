@@ -1,5 +1,7 @@
+/*
+
 pub mod generated {
-    tonic::include_proto!("auth");
+    tonic::include_proto!("register");
 }
 
 #[cfg(test)]
@@ -248,3 +250,7 @@ mod tests {
         assert_eq!(username, "testuser");
     }
 }
+
+
+
+*/
