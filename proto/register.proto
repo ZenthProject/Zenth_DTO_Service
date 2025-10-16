@@ -7,10 +7,10 @@ message Request {
   RegisterRequest requete_global = 1; // Contenu chiffré complet de la requête
 }
 
-// Requête d'enregistrement entièrement chiffrée
 message RegisterRequest {
   bytes client_nonce = 1; // Nonce aléatoire (16-32 octets) pour prévenir les replay attacks.
   int64 timestamp = 2;    // Timestamp epoch ms (optionnel, peut être chiffré dans l'envelope)
+  string method = 1;
   EncryptedEnvelope envelope = 10; // Enveloppe contenant toutes les couches chiffrées
 }
 
