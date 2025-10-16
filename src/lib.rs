@@ -9,3 +9,7 @@ pub mod login {
 pub mod register {
     tonic::include_proto!("register");
 }
+
+pub mod request {
+    tonic::include_proto!("request");
+}
