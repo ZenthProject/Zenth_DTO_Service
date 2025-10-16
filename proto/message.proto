@@ -1,19 +1,18 @@
 syntax = "proto3";
 
-package auth;
+package message;
 
-// Requête de login entièrement chiffrée
+// Message chiffré à transmettre
 message Request {
-  LoginRequest requete_global = 1;
+  MessageRequest requete_global = 1;
 }
 
-message LoginRequest {
+message MessageRequest {
   bytes client_nonce = 1;
   int64 timestamp = 2;
   EncryptedEnvelope envelope = 10;
 }
 
-// Même structure que dans register.proto
 message EncryptedEnvelope {
   bytes client_ephemeral_pub = 1;
   repeated KeyWrap key_wraps = 2;
@@ -32,7 +31,7 @@ message Layer2Ciphertext {
 message Layer1Ciphertext {
   bytes ciphertext = 1;
   bytes nonce = 2;
-  InnerLoginPayload inner = 3;
+  InnerMessagePayload inner = 3;
   bytes aead_tag = 4;
 }
 
@@ -42,8 +41,8 @@ message KeyWrap {
   bytes key_id = 3;
 }
 
-message InnerLoginPayload {
-  string username = 1;
-  bytes password_proof = 2;
+message InnerMessagePayload {
+  bytes message_body = 1; // Peut être texte, fichier, ou autre
+  bytes recipient_pubkey = 2;
   int64 timestamp = 3;
 }

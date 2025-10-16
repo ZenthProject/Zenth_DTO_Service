@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package auth;
+
+message Request {
+  InnerRegisterPayload requete_global = 1;
+}
+
+message InnerRegisterPayload {
+  string username = 1;
+  bytes password_proof = 2;
+  int64 timestamp = 3;
+}
