@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package request;
+
+import "registertest.proto";
+// import "register.proto";
+
+message Request {
+  Method request = 1;
+}
+
+message Method {
+  string method = 1;
+
+  oneof payload {
+    registertest.InnerRegisterPayload register_request = 2;
+  }
+}

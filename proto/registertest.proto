@@ -2,12 +2,7 @@ syntax = "proto3";
 
 package registertest;
 
-message Request {
-    InnerRegisterPayload requete_global = 1;
-}
-
 message InnerRegisterPayload {
-    string method = 1;
     string username = 2;
     bytes password_proof = 3;
     int64 timestamp = 4;
