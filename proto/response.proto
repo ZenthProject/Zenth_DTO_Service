@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package response;
+
+import "delete_response.proto";
+import "username_response.proto";
+
+message ResponseData {
+  string method = 1;
+
+  oneof payload {
+    RegisterResponse register = 2;
+    DeleteResponse delete = 3;
+  }
+}
+
+
