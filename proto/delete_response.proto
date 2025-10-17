@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package delete_response;
+package response;
 
 message DeleteResponse {
   bool success = 1;

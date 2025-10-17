@@ -13,3 +13,7 @@ pub mod register {
 pub mod request {
     tonic::include_proto!("request");
 }
+
+pub mod response {
+    tonic::include_proto!("response");
+}

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package username_response;
+package response;
 
 message RegisterResponse {
   string username = 1;
