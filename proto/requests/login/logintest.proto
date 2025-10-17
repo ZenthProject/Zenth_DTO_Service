@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package logintest;
+
+message InnerLoginPayload {
+    string username = 2;
+    bytes password_proof = 3;
+    int64 timestamp = 4;
+}

@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package response;
-
-message DeleteResponse {
-  bool success = 1;
-}

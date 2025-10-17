@@ -2,9 +2,6 @@ syntax = "proto3";
 
 package response;
 
-import "delete_response.proto";
-import "username_response.proto";
-
 message ResponseData {
   string method = 1;
 
@@ -15,3 +12,11 @@ message ResponseData {
 }
 
 
+message DeleteResponse {
+  bool success = 1;
+}
+
+message RegisterResponse {
+  string username = 1;
+  int64 timestamp = 2;
+}
